@@ -80,10 +80,12 @@ const tick = (ms = 1000) => (clock += ms);
 // Amount (ADR 0001)
 // ---------------------------------------------------------------------------
 
-test('the + button starts an amount, counts up, and − takes it away again', () => {
-  assert.equal(bumpAmount('butter', 1), '1 butter');
-  assert.equal(bumpAmount('1 butter', 1), '2 butter');
+test('the + button starts an amount at two, counts up, and − takes it away again', () => {
+  // An item with no number counts as one, so the first tap makes it two.
+  assert.equal(bumpAmount('butter', 1), '2 butter');
+  assert.equal(bumpAmount('2 butter', 1), '3 butter');
   assert.equal(bumpAmount('2 kg flour', 1), '3 kg flour');
+  assert.equal(bumpAmount('3 butter', -1), '2 butter');
   assert.equal(bumpAmount('2 butter', -1), '1 butter');
   assert.equal(bumpAmount('1 butter', -1), 'butter');
   assert.equal(bumpAmount('butter', -1), 'butter');

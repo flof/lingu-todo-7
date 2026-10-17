@@ -46,9 +46,12 @@ test('the amount buttons count up and down inside the item text', async ({ page 
   await addItem(page, 'flour');
   await addItem(page, 'butter');
 
+  // An item with no number counts as one, so the first tap makes it two.
   await rowFor(page, 'butter').getByTestId('item-plus').click();
-  await expect(rowFor(page, '1 butter')).toBeVisible();
-  await rowFor(page, '1 butter').getByTestId('item-plus').click();
+  await expect(rowFor(page, '2 butter')).toBeVisible();
+  await rowFor(page, '2 butter').getByTestId('item-plus').click();
+  await expect(rowFor(page, '3 butter')).toBeVisible();
+  await rowFor(page, '3 butter').getByTestId('item-minus').click();
   await expect(rowFor(page, '2 butter')).toBeVisible();
   await rowFor(page, '2 butter').getByTestId('item-minus').click();
   await expect(rowFor(page, '1 butter')).toBeVisible();

@@ -108,13 +108,14 @@ export function readLabel(text: string): string {
 }
 
 /**
- * Apply a tap on an item's +/− button. Up from nothing means "1"; down from
- * nothing, or from 1, means no amount at all. Only the digits change, so the
- * rest of the line is left exactly as the member typed it.
+ * Apply a tap on an item's +/− button. An item with no number counts as one, so
+ * the first tap of + turns "butter" into "2 butter"; tapping − back down through
+ * "1 butter" removes the number entirely. Only the digits change, so the rest of
+ * the line is left exactly as the member typed it.
  */
 export function bumpAmount(text: string, delta: 1 | -1): string {
   const match = LEADING_AMOUNT.exec(text);
-  if (!match) return delta === 1 ? `1 ${text}`.trimEnd() : text;
+  if (!match) return delta === 1 ? `2 ${text}`.trimEnd() : text;
 
   const digits = match[1] as string;
   const next = Number(digits) + delta;

@@ -10,7 +10,8 @@ Live at <https://todo7.lingu.at>.
 
 - **Lists**, any number, each with a name and an emoji. Anyone can create one.
 - **Items** are one line of text. A leading number is the amount: the **+** and
-  **−** buttons count it up and down (`butter` → `1 butter` → `2 butter`). See
+  **−** buttons count it up and down, and an item with no number counts as one,
+  so `butter` → `2 butter` → `3 butter`. See
   [ADR 0001](docs/adr/0001-amount-as-leading-number-in-item-text.md).
 - **Checking** an item strikes it through in place for five seconds — long enough
   to undo in the aisle — then it sinks greyed to the bottom of the list, where it

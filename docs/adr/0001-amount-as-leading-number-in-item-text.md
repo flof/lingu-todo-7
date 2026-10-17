@@ -2,11 +2,12 @@
 
 Household lists need quantities ("2 butter", "3 rolls"), but only ever as a rough
 count, never as something the app calculates with. We decided an item's text may
-begin with a number that acts as its amount, and the **+**/**−** buttons on an
-item either prepend a `1` or increment/decrement that leading number. There is no
-separate quantity column and no unit system. This matches how these lists are
-written on paper, and it lets "2 kg flour" and "6-pack" exist without the app ever
-needing to understand units.
+begin with a number that acts as its amount, and the **+**/**−** buttons
+increment or decrement that leading number. An item with no number counts as one,
+so the first tap of **+** turns "butter" into "2 butter". There is no separate
+quantity column and no unit system. This matches how these lists are written on
+paper, and it lets "2 kg flour" and "6-pack" exist without the app ever needing to
+understand units.
 
 ## Consequences
 
