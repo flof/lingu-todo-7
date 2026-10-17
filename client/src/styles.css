@@ -1,0 +1,405 @@
+:root {
+  --bg: #f6f7f5;
+  --surface: #ffffff;
+  --ink: #1c2320;
+  --muted: #6b7a72;
+  --line: #e2e6e1;
+  --brand: #1f6f4a;
+  --brand-ink: #ffffff;
+  --danger: #a5322a;
+  --notice: #7a4b00;
+  --notice-bg: #fdf1d8;
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #121614;
+    --surface: #1b211e;
+    --ink: #e8ede9;
+    --muted: #9aa8a0;
+    --line: #2b332f;
+    --brand: #4bbd85;
+    --brand-ink: #08150f;
+    --danger: #f08a80;
+    --notice: #f4c66b;
+    --notice-bg: #2e2716;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 16px/1.45 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  -webkit-text-size-adjust: 100%;
+}
+
+.app {
+  min-height: 100vh;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.pad {
+  padding: 16px;
+  max-width: 44rem;
+  margin: 0 auto;
+}
+
+.small {
+  font-size: 0.85rem;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.error {
+  color: var(--danger);
+  margin: 0;
+}
+
+.brand {
+  margin: 0 0 4px;
+  font-size: 1.6rem;
+}
+
+h1 {
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+h2 {
+  font-size: 1rem;
+  margin: 0 0 8px;
+}
+
+/* -- controls ------------------------------------------------------------ */
+
+button,
+input {
+  font: inherit;
+  border-radius: 10px;
+}
+
+input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+}
+
+input:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+button {
+  padding: 12px 14px;
+  border: 1px solid transparent;
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+  min-height: 44px;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.primary {
+  background: var(--brand);
+  color: var(--brand-ink);
+  font-weight: 600;
+}
+
+.bare {
+  background: transparent;
+  border-color: transparent;
+  color: var(--brand);
+  min-height: 40px;
+  padding: 8px 6px;
+}
+
+.bare.danger,
+.danger {
+  color: var(--danger);
+}
+
+.stack {
+  display: grid;
+  gap: 14px;
+  margin: 18px 0;
+}
+
+.stack label {
+  display: grid;
+  gap: 6px;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px;
+  margin: 14px 0;
+  display: grid;
+  gap: 10px;
+}
+
+.centring {
+  margin: 8vh auto 0;
+  max-width: 26rem;
+}
+
+.inline-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* -- banners ------------------------------------------------------------- */
+
+.banners {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+.banner {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  font-size: 0.9rem;
+}
+
+.banner-offline {
+  background: var(--notice-bg);
+  color: var(--notice);
+}
+
+.banner-pending {
+  background: var(--surface);
+  color: var(--muted);
+  border-bottom: 1px solid var(--line);
+}
+
+.banner-notice {
+  background: var(--notice-bg);
+  color: var(--notice);
+}
+
+.banner-archived {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  margin: 0 0 12px;
+  color: var(--muted);
+}
+
+/* -- lists --------------------------------------------------------------- */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.topbar-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.section-title {
+  margin: 18px 0 8px;
+  color: var(--muted);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.rows,
+.items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.row {
+  display: flex;
+  align-items: stretch;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.rows.archived .row {
+  opacity: 0.7;
+}
+
+.pin {
+  border-radius: 0;
+  background: transparent;
+  font-size: 1.1rem;
+  color: var(--muted);
+  padding: 0 8px;
+}
+
+.pin[aria-pressed='true'] {
+  color: var(--brand);
+}
+
+.list-open {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: transparent;
+  border-radius: 0;
+  text-align: left;
+  justify-content: flex-start;
+}
+
+.list-emoji {
+  font-size: 1.2rem;
+}
+
+.list-name {
+  flex: 1;
+  font-weight: 600;
+}
+
+/* -- items --------------------------------------------------------------- */
+
+.items {
+  gap: 6px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 4px 6px;
+}
+
+.item .check {
+  width: 40px;
+  min-height: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: transparent;
+  font-size: 1.1rem;
+  line-height: 1;
+  color: var(--brand);
+  flex: none;
+}
+
+.item .item-text {
+  flex: 1;
+  background: transparent;
+  border-color: transparent;
+  text-align: left;
+  padding: 10px 4px;
+  color: inherit;
+  overflow-wrap: anywhere;
+}
+
+.item-input {
+  flex: 1;
+  padding: 8px 10px;
+}
+
+.item.checked .item-text,
+.item.checked .item-text button {
+  text-decoration: line-through;
+  color: var(--muted);
+}
+
+.item-controls {
+  display: flex;
+  gap: 2px;
+  flex: none;
+}
+
+.step {
+  width: 40px;
+  min-height: 40px;
+  padding: 0;
+  font-size: 1.1rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: transparent;
+  color: inherit;
+}
+
+.item .danger {
+  width: 40px;
+  min-height: 40px;
+  padding: 0;
+  background: transparent;
+  border-color: transparent;
+}
+
+.add-item {
+  display: flex;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.add-item input {
+  flex: 1;
+}
+
+.clear {
+  margin: 14px 0;
+}
+
+.list-admin {
+  margin-bottom: 12px;
+}
+
+/* -- emoji picker -------------------------------------------------------- */
+
+.emoji-picker {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.emoji {
+  min-height: 40px;
+  width: 44px;
+  padding: 0;
+  font-size: 1.2rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: transparent;
+}
+
+.emoji.chosen {
+  border-color: var(--brand);
+  background: color-mix(in srgb, var(--brand) 14%, transparent);
+}

@@ -1,0 +1,23 @@
+# Host nginx terminates TLS for todo7.lingu.at and forwards to this container,
+# which only publishes on the loopback interface. See deploy/nginx/ for the
+# server block. Deploy with: docker compose up -d --build
+services:
+  app:
+    build: .
+    image: lingutodo7:latest
+    container_name: lingutodo7
+    restart: unless-stopped
+    environment:
+      PORT: '8080'
+      DATA_DIR: /data
+      BACKUP_DIR: /data/backups
+      STATIC_DIR: /app/client/dist
+      APP_URL: https://todo7.lingu.at
+      # nginx does the TLS, so the cookie's Secure flag comes from
+      # X-Forwarded-Proto; keep this on.
+      SECURE_COOKIES: 'true'
+    ports:
+      # Loopback only: nginx on the host reaches it, the internet does not.
+      - '127.0.0.1:8090:8080'
+    volumes:
+      - ./data:/data

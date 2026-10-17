@@ -1,0 +1,9 @@
+node_modules/
+client/dist/
+data/
+backups/
+.e2e/
+*.log
+.env
+test-results/
+playwright-report/

@@ -1,0 +1,32 @@
+{
+  "name": "lingutodo7",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Shared family lists for one household",
+  "scripts": {
+    "dev:server": "node --watch server/src/index.ts",
+    "dev:client": "vite --config client/vite.config.ts",
+    "build": "vite build --config client/vite.config.ts",
+    "start": "node server/src/index.ts",
+    "typecheck": "tsc -p tsconfig.server.json && tsc -p client/tsconfig.json",
+    "test": "node --test server/test/*.test.ts",
+    "test:e2e": "playwright test --config client/test/playwright.config.ts",
+    "icons": "node scripts/make-icons.mjs"
+  },
+  "dependencies": {
+    "hono": "^4.9.7"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.0",
+    "@types/node": "^24.9.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-react": "^5.0.4",
+    "idb": "^8.0.3",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.9"
+  }
+}
