@@ -80,6 +80,7 @@ export class Store {
   #view: View = EMPTY;
   #listeners = new Set<() => void>();
   #inFlight: Promise<void> | null = null;
+  #again = false;
 
   subscribe = (listener: () => void): (() => void) => {
     this.#listeners.add(listener);
@@ -176,9 +177,20 @@ export class Store {
   // -- syncing --------------------------------------------------------------
 
   sync(): Promise<void> {
-    if (this.#inFlight) return this.#inFlight;
+    // A write made while a sync is already running lands in the outbox after
+    // that sync read it, so it would otherwise wait for the next timer. Ask for
+    // one more pass instead, so the change goes up right away (and the pending
+    // banner never lingers).
+    if (this.#inFlight) {
+      this.#again = true;
+      return this.#inFlight;
+    }
     this.#inFlight = this.#runSync().finally(() => {
       this.#inFlight = null;
+      if (this.#again) {
+        this.#again = false;
+        void this.sync();
+      }
     });
     return this.#inFlight;
   }

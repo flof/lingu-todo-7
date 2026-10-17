@@ -41,6 +41,36 @@ test('a checked item stays put for five seconds, then sinks greyed to the bottom
   await expect(rowFor(page, 'butter')).toHaveAttribute('data-checked', 'false');
 });
 
+test('checking an item never flashes the “still going up” bar for a fast change', async ({
+  page,
+}) => {
+  await createList(page, unique('Groceries'));
+  await addItem(page, 'milk');
+
+  // Let the add settle fully before we start watching syncs.
+  await page.waitForLoadState('networkidle');
+
+  // Now make the server slow, so the check really is outstanding for a while.
+  await page.route(/\/api\/sync$/, async (route) => {
+    await new Promise((resolve) => setTimeout(resolve, 4000));
+    await route.continue();
+  });
+
+  await rowFor(page, 'milk').getByTestId('item-check').click();
+
+  // The tap itself must not flash the bar: for the first moment it stays away,
+  // even though the change cannot reach the server yet. Sampling the DOM once
+  // (not polling) is the point — a flash is exactly what a poll would miss.
+  await page.waitForTimeout(1000);
+  expect(await page.getByTestId('pending-writes').count()).toBe(0);
+
+  // Only once the change has genuinely been waiting does the bar admit it.
+  await expect(page.getByTestId('pending-writes')).toBeVisible({ timeout: 5000 });
+
+  // And the moment the slow answer lands, it goes away again.
+  await expect(page.getByTestId('pending-writes')).toHaveCount(0, { timeout: 10_000 });
+});
+
 test('the amount buttons count up and down inside the item text', async ({ page }) => {
   await createList(page, unique('Groceries'));
   await addItem(page, 'flour');
