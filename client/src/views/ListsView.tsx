@@ -9,6 +9,7 @@ export function ListsView(): ReactElement {
   const view = useStore();
   const [showArchived, setShowArchived] = useState(false);
   const [invite, setInvite] = useState<{ link: string; expiresAt: number } | null>(null);
+  const [showForm, setShowForm] = useState(false);
   const [newName, setNewName] = useState('');
   const [newEmoji, setNewEmoji] = useState('🛒');
 
@@ -77,6 +78,14 @@ export function ListsView(): ReactElement {
       <header className="topbar">
         <h1 data-testid="page-title">Lists</h1>
         <div className="topbar-actions">
+          <button
+            type="button"
+            className="primary"
+            onClick={() => setShowForm(true)}
+            data-testid="new-list"
+          >
+            New list
+          </button>
           <button type="button" className="bare" onClick={() => void makeInvite()} data-testid="invite-button">
             Invite
           </button>
@@ -114,20 +123,28 @@ export function ListsView(): ReactElement {
         </section>
       ) : null}
 
-      <form className="card" onSubmit={createList}>
-        <h2>New list</h2>
-        <input
-          placeholder="Groceries, Holiday packing…"
-          value={newName}
-          data-testid="new-list-name"
-          onChange={(event) => setNewName(event.target.value)}
-          maxLength={60}
-        />
-        <EmojiPicker value={newEmoji} onChange={setNewEmoji} label="Icon for the new list" />
-        <button type="submit" className="primary" data-testid="create-list" disabled={!newName.trim()}>
-          Create list
-        </button>
-      </form>
+      {showForm ? (
+        <form className="card" onSubmit={createList}>
+          <h2>New list</h2>
+          <input
+            placeholder="Groceries, Holiday packing…"
+            value={newName}
+            data-testid="new-list-name"
+            autoFocus
+            onChange={(event) => setNewName(event.target.value)}
+            maxLength={60}
+          />
+          <EmojiPicker value={newEmoji} onChange={setNewEmoji} label="Icon for the new list" />
+          <div className="inline-actions">
+            <button type="submit" className="primary" data-testid="create-list" disabled={!newName.trim()}>
+              Create list
+            </button>
+            <button type="button" className="bare" data-testid="cancel-new-list" onClick={() => setShowForm(false)}>
+              Cancel
+            </button>
+          </div>
+        </form>
+      ) : null}
 
       {pinned.length > 0 ? (
         <section>
@@ -139,7 +156,7 @@ export function ListsView(): ReactElement {
       <section>
         <h2 className="section-title">All lists</h2>
         {rest.length === 0 && pinned.length === 0 ? (
-          <p className="muted">No lists yet. Make the first one above.</p>
+          <p className="muted">No lists yet. Tap “New list” to make the first one.</p>
         ) : (
           <ul className="rows">{rest.map(row)}</ul>
         )}

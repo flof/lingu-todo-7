@@ -247,3 +247,18 @@ test('the list is still there after a reload', async ({ page }) => {
   await expect(page.getByRole('heading', { name: new RegExp(name) })).toBeVisible();
   await expect(rowFor(page, 'milk')).toBeVisible();
 });
+
+test('the new-list form is hidden until “New list” is tapped, and can be dismissed', async ({
+  page,
+}) => {
+  // The lists page opens without the add-new form in the way.
+  await expect(page.getByTestId('new-list-name')).toHaveCount(0);
+  await expect(page.getByTestId('create-list')).toHaveCount(0);
+
+  await page.getByTestId('new-list').click();
+  await expect(page.getByTestId('new-list-name')).toBeVisible();
+  await expect(page.getByTestId('create-list')).toBeVisible();
+
+  await page.getByTestId('cancel-new-list').click();
+  await expect(page.getByTestId('new-list-name')).toHaveCount(0);
+});

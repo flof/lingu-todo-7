@@ -11,6 +11,7 @@ export async function signIn(page: Page, email = 'mum@example.com'): Promise<voi
 
 /** Creates a list and lands on it. */
 export async function createList(page: Page, name: string, emoji = '🛒'): Promise<void> {
+  await page.getByTestId('new-list').click();
   await page.getByTestId('new-list-name').fill(name);
   await page.getByRole('button', { name: emoji }).click();
   await page.getByTestId('create-list').click();
