@@ -41,6 +41,33 @@ test('a checked item stays put for five seconds, then sinks greyed to the bottom
   await expect(rowFor(page, 'butter')).toHaveAttribute('data-checked', 'false');
 });
 
+test('checked items sink together once the ticking off stops, not one by one', async ({
+  page,
+}) => {
+  await createList(page, unique('Groceries'));
+  await addItem(page, 'milk');
+  await addItem(page, 'bread');
+  await addItem(page, 'butter');
+
+  // Tick three things off a couple of seconds apart, the way a list is used.
+  await rowFor(page, 'butter').getByTestId('item-check').click();
+  await page.waitForTimeout(2000);
+  await rowFor(page, 'bread').getByTestId('item-check').click();
+  await page.waitForTimeout(2000);
+  await rowFor(page, 'milk').getByTestId('item-check').click();
+
+  // Several seconds after the very first tick, nothing has moved yet: the quiet
+  // period runs from the last tick, so the batch holds together.
+  await page.waitForTimeout(2500);
+  expect(await itemOrder(page)).toEqual(['butter', 'bread', 'milk']);
+
+  // Only once the ticking off has stopped for five seconds do they all drop,
+  // most-recently-checked at the top of the sunk pile.
+  await expect
+    .poll(() => itemOrder(page), { timeout: 15_000 })
+    .toEqual(['milk', 'bread', 'butter']);
+});
+
 test('checking an item never flashes the “still going up” bar for a fast change', async ({
   page,
 }) => {

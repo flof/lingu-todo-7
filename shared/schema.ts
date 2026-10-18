@@ -12,7 +12,7 @@ export const LIMITS = {
   memberName: 40,
   email: 254,
   passwordMin: 8,
-  /** How long a checked item stays in place before it sinks (ms). */
+  /** How long after the last check that checked items hold their place (ms). */
   sinkDelayMs: 5000,
   /** Invites expire after this long. */
   inviteTtlMs: 7 * 24 * 60 * 60 * 1000,

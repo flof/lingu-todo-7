@@ -5,31 +5,31 @@ import { store } from '../store.ts';
 import { useStore } from '../useStore.ts';
 import { EmojiPicker } from './EmojiPicker.tsx';
 
-/** Items checked on this device stay put until their five seconds are up. */
+/**
+ * A checked item holds its place for a little while, so a mis-tap can be undone
+ * without hunting for it. But the list is ticked off in a burst — one line, then
+ * the next — and nobody wants them sliding away one at a time while they are
+ * still reading. So a single quiet period runs from the last check, and when it
+ * is up the whole batch sinks to the bottom together.
+ */
 function useStillInPlace(): { ids: Set<string>; mark: (id: string) => void } {
   const [ids, setIds] = useState<Set<string>>(() => new Set());
-  const timers = useRef(new Map<string, number>());
+  const timer = useRef<number | undefined>(undefined);
 
   const mark = useCallback((id: string) => {
     setIds((previous) => new Set(previous).add(id));
-    const running = timers.current.get(id);
-    if (running !== undefined) window.clearTimeout(running);
-    timers.current.set(
-      id,
-      window.setTimeout(() => {
-        timers.current.delete(id);
-        setIds((previous) => {
-          const next = new Set(previous);
-          next.delete(id);
-          return next;
-        });
-      }, LIMITS.sinkDelayMs),
-    );
+    // A new tick restarts the quiet period, holding the whole batch in place.
+    if (timer.current !== undefined) window.clearTimeout(timer.current);
+    timer.current = window.setTimeout(() => {
+      timer.current = undefined;
+      // Quiet for long enough: everything checked drops at once.
+      setIds(new Set());
+    }, LIMITS.sinkDelayMs);
   }, []);
 
   useEffect(
     () => () => {
-      for (const timer of timers.current.values()) window.clearTimeout(timer);
+      if (timer.current !== undefined) window.clearTimeout(timer.current);
     },
     [],
   );

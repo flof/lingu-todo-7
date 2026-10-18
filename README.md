@@ -13,9 +13,10 @@ Live at <https://todo7.lingu.at>.
   **−** buttons count it up and down, and an item with no number counts as one,
   so `butter` → `2 butter` → `3 butter`. See
   [ADR 0001](docs/adr/0001-amount-as-leading-number-in-item-text.md).
-- **Checking** an item strikes it through in place for five seconds — long enough
-  to undo in the aisle — then it sinks greyed to the bottom of the list, where it
-  stays until someone taps **Clear checked**.
+- **Checking** an item strikes it through in place — long enough to undo in the
+  aisle — and once you stop ticking things off for five seconds the whole batch
+  sinks greyed to the bottom of the list together, where it stays until someone
+  taps **Clear checked**.
 - **Offline** the app keeps working from the device's own copy: every write is
   queued and pushed when the phone is back online. See
   [ADR 0002](docs/adr/0002-offline-first-with-full-write-outbox.md).
@@ -59,9 +60,10 @@ npm run typecheck
 
 The API tests cover permissions, last-write-wins, archived and deleted lists,
 amount arithmetic, invites and the backup routine. The browser tests cover the
-two things only a browser can: the checked item sinking after five seconds with
-its undo window, and writes made with the network cut arriving afterwards —
-including the case that cannot be saved because the list was deleted meanwhile.
+two things only a browser can: the checked items sinking together once the ticking
+off stops, with their undo window, and writes made with the network cut arriving
+afterwards — including the case that cannot be saved because the list was deleted
+meanwhile.
 
 ## Deploying
 
