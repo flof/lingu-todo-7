@@ -225,6 +225,17 @@ button:disabled {
   gap: 4px;
 }
 
+/* On a list, the name sits next to "‹ Lists" and the hamburger is pinned right. */
+.list-topbar h1 {
+  margin-right: auto;
+}
+
+.menu-toggle {
+  font-size: 1.25rem;
+  line-height: 1;
+  min-width: 44px;
+}
+
 .section-title {
   margin: 18px 0 8px;
   color: var(--muted);

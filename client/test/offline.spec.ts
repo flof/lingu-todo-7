@@ -60,6 +60,7 @@ test('a queued write against a list that has been deleted is reported, not lost 
 
   // Mum is the creator, and deletes the list in the meantime.
   page.once('dialog', (dialog) => void dialog.accept());
+  await page.getByTestId('list-menu').click();
   await page.getByTestId('delete-list').click();
   await expect(page.getByTestId('page-title')).toHaveText('Lists');
 

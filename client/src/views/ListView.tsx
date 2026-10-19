@@ -45,6 +45,7 @@ export function ListView({ listId }: { listId: string }): ReactElement {
   const [draft, setDraft] = useState('');
   const [editing, setEditing] = useState<{ id: string; text: string } | null>(null);
   const [renaming, setRenaming] = useState<{ name: string; emoji: string } | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   if (!list) {
     return (
@@ -164,13 +165,26 @@ export function ListView({ listId }: { listId: string }): ReactElement {
 
   return (
     <main className="pad">
-      <header className="topbar">
+      <header className="topbar list-topbar">
         <button type="button" className="bare" onClick={() => navigate('/')} data-testid="back-to-lists">
           ‹ Lists
         </button>
         <h1>
           <span aria-hidden="true">{list.emoji || '📋'}</span> {list.name}
         </h1>
+        {isCreator ? (
+          <button
+            type="button"
+            className="bare menu-toggle"
+            data-testid="list-menu"
+            aria-label={menuOpen ? 'Hide list actions' : 'Show list actions'}
+            aria-expanded={menuOpen}
+            aria-controls="list-actions"
+            onClick={() => setMenuOpen((open) => !open)}
+          >
+            ☰
+          </button>
+        ) : null}
       </header>
 
       {readOnly ? (
@@ -224,13 +238,16 @@ export function ListView({ listId }: { listId: string }): ReactElement {
               </button>
             </div>
           </form>
-        ) : (
-          <div className="inline-actions list-admin">
+        ) : menuOpen ? (
+          <div className="inline-actions list-admin" id="list-actions" data-testid="list-actions">
             <button
               type="button"
               className="bare"
               data-testid="rename-list"
-              onClick={() => setRenaming({ name: list.name, emoji: list.emoji })}
+              onClick={() => {
+                setMenuOpen(false);
+                setRenaming({ name: list.name, emoji: list.emoji });
+              }}
             >
               Rename
             </button>
@@ -238,7 +255,10 @@ export function ListView({ listId }: { listId: string }): ReactElement {
               type="button"
               className="bare"
               data-testid="archive-list"
-              onClick={() => void store.send({ kind: 'list.archive', listId: list.id, archived: true })}
+              onClick={() => {
+                setMenuOpen(false);
+                void store.send({ kind: 'list.archive', listId: list.id, archived: true });
+              }}
             >
               Archive
             </button>
@@ -248,6 +268,7 @@ export function ListView({ listId }: { listId: string }): ReactElement {
               data-testid="delete-list"
               onClick={() => {
                 if (window.confirm(`Delete “${list.name}” and everything on it?`)) {
+                  setMenuOpen(false);
                   void store.send({ kind: 'list.delete', listId: list.id }).then(() => navigate('/'));
                 }
               }}
@@ -255,7 +276,7 @@ export function ListView({ listId }: { listId: string }): ReactElement {
               Delete
             </button>
           </div>
-        )
+        ) : null
       ) : null}
 
       {!readOnly ? (

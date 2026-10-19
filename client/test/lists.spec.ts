@@ -169,14 +169,16 @@ test('only the list’s creator gets rename, archive and delete', async ({ brows
   await dadPage.getByRole('button', { name: new RegExp(name) }).click();
   await expect(dadPage.getByTestId('item-row')).toHaveCount(1);
 
-  // Dad may use the list, but not administer it.
+  // Dad may use the list, but not administer it — not even the menu.
+  await expect(dadPage.getByTestId('list-menu')).toHaveCount(0);
   await expect(dadPage.getByTestId('rename-list')).toHaveCount(0);
   await expect(dadPage.getByTestId('archive-list')).toHaveCount(0);
   await expect(dadPage.getByTestId('delete-list')).toHaveCount(0);
   await addItem(dadPage, 'sunscreen');
   await dadPage.getByTestId('item-check').first().click();
 
-  // Mum has the controls, and her rename reaches Dad.
+  // Mum has the controls behind the menu, and her rename reaches Dad.
+  await mumPage.getByTestId('list-menu').click();
   await mumPage.getByTestId('rename-list').click();
   await mumPage.getByTestId('rename-input').fill(`${name} done`);
   await mumPage.getByTestId('rename-save').click();
@@ -193,6 +195,7 @@ test('an archived list is read-only until its creator takes it back', async ({ p
   await createList(page, unique('Holiday packing'), '🧳');
   await addItem(page, 'passports');
 
+  await page.getByTestId('list-menu').click();
   await page.getByTestId('archive-list').click();
   await expect(page.getByTestId('archived-banner')).toBeVisible();
   await expect(page.getByTestId('add-item-input')).toHaveCount(0);
@@ -200,6 +203,26 @@ test('an archived list is read-only until its creator takes it back', async ({ p
   await page.getByTestId('unarchive').click();
   await expect(page.getByTestId('archived-banner')).toHaveCount(0);
   await expect(page.getByTestId('add-item-input')).toBeVisible();
+});
+
+test('the list actions stay hidden behind a hamburger until it is tapped', async ({ page }) => {
+  await createList(page, unique('Holiday packing'), '🧳');
+
+  // Nothing destructive on screen while using the list.
+  await expect(page.getByTestId('rename-list')).toHaveCount(0);
+  await expect(page.getByTestId('archive-list')).toHaveCount(0);
+  await expect(page.getByTestId('delete-list')).toHaveCount(0);
+
+  // Tapping the hamburger brings them out; tapping it again puts them away.
+  await page.getByTestId('list-menu').click();
+  await expect(page.getByTestId('rename-list')).toBeVisible();
+  await expect(page.getByTestId('archive-list')).toBeVisible();
+  await expect(page.getByTestId('delete-list')).toBeVisible();
+
+  await page.getByTestId('list-menu').click();
+  await expect(page.getByTestId('rename-list')).toHaveCount(0);
+  await expect(page.getByTestId('archive-list')).toHaveCount(0);
+  await expect(page.getByTestId('delete-list')).toHaveCount(0);
 });
 
 test('a list can be pinned, and pinned lists come first', async ({ page }) => {
