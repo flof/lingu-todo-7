@@ -225,9 +225,9 @@ button:disabled {
   gap: 4px;
 }
 
-/* On a list, the name sits next to "‹ Lists" and the hamburger is pinned right. */
+/* On a list, the name and emoji sit at the right, beside the hamburger. */
 .list-topbar h1 {
-  margin-right: auto;
+  margin-left: auto;
 }
 
 .menu-toggle {
