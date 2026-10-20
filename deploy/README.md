@@ -1,7 +1,8 @@
 # Deploying LinguTodo7
 
-Target: the existing Ubuntu VPS, which already runs nginx (installed with apt)
-and certbot, and runs its apps under docker compose.
+Expected target: a Ubuntu VPS with nginx, certbot and docker.
+
+Replace <DOMAINNAME> with your real domain name.
 
 ## First time
 
@@ -26,23 +27,23 @@ and certbot, and runs its apps under docker compose.
 3. Add the nginx server block and certificates:
 
    ```sh
-   sudo cp deploy/nginx/todo7.lingu.at.conf /etc/nginx/sites-available/todo7.lingu.at
-   sudo ln -sf /etc/nginx/sites-available/todo7.lingu.at /etc/nginx/sites-enabled/todo7.lingu.at
+   sudo cp deploy/nginx/<DOMAINNAME>.conf /etc/nginx/sites-available/<DOMAINNAME>
+   sudo ln -sf /etc/nginx/sites-available/<DOMAINNAME> /etc/nginx/sites-enabled/<DOMAINNAME>
    sudo nginx -t && sudo systemctl reload nginx
-   sudo certbot --nginx -d todo7.lingu.at
+   sudo certbot --nginx -d <DOMAINNAME>
    ```
 
-   Point the DNS `A` (and `AAAA`, if you have one) record for `todo7.lingu.at`
+   Point the DNS `A` (and `AAAA`, if you have one) record for your domain name
    at the VPS first, or certbot will fail to validate.
 
 4. Check HTTPS end to end:
 
    ```sh
-   curl -sI https://todo7.lingu.at/api/health
+   curl -sI https://<DOMAINNAME>/api/health
    ```
 
 5. Open the first invite link from step 2 (rewrite its host to
-   `https://todo7.lingu.at/invite/…` if you copied it from the log) and create
+   `https://<DOMAINNAME>/invite/…` if you copied it from the log) and create
    the first account. That account can then invite the other three from the
    **Invite** button. The first-run invite is deleted as soon as the first
    account exists.

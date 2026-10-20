@@ -4,8 +4,6 @@ The household's shared lists: endless shopping lists, one-off packing lists, and
 anything else four adults want to remember together. Phone-first, installable to
 the home screen, and usable in a shop with no signal.
 
-Live at <https://todo7.lingu.at>.
-
 ## What it does
 
 - **Lists**, any number, each with a name and an emoji. Anyone can create one.
@@ -67,9 +65,7 @@ meanwhile.
 
 ## Deploying
 
-See [deploy/README.md](deploy/README.md). In short: `docker compose up -d
---build` on the VPS, with host nginx terminating TLS for `todo7.lingu.at` and the
-container published only on `127.0.0.1:8090`.
+See [deploy/README.md](deploy/README.md).
 
 ## How it is built
 
@@ -88,5 +84,5 @@ server/src/          app, sync engine, auth, migrations, backups
 server/test/         API tests
 client/src/          React PWA, local database, outbox
 client/test/         Playwright specs
-deploy/nginx/        server block for todo7.lingu.at
+deploy/nginx/        server block for nginx
 ```

@@ -1,4 +1,4 @@
-# Host nginx terminates TLS for todo7.lingu.at and forwards to this container,
+# Host nginx terminates TLS for todo.lingu.at and forwards to this container,
 # which only publishes on the loopback interface. See deploy/nginx/ for the
 # server block. Deploy with: docker compose up -d --build
 services:
@@ -12,7 +12,7 @@ services:
       DATA_DIR: /data
       BACKUP_DIR: /data/backups
       STATIC_DIR: /app/client/dist
-      APP_URL: https://todo7.lingu.at
+      APP_URL: https://todo.lingu.at
       # nginx does the TLS, so the cookie's Secure flag comes from
       # X-Forwarded-Proto; keep this on.
       SECURE_COOKIES: 'true'
