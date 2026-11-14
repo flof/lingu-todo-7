@@ -6,6 +6,9 @@ services:
     build: .
     image: lingutodo7:latest
     container_name: lingutodo7
+    networks:
+      - default
+      - caddy
     restart: unless-stopped
     environment:
       PORT: '8080'
@@ -18,3 +21,6 @@ services:
       SECURE_COOKIES: 'true'
     volumes:
       - ./data:/data
+networks:
+  caddy:
+    external: true
