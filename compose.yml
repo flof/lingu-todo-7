@@ -5,6 +5,7 @@ services:
   app:
     build: .
     image: lingutodo7:latest
+    user: "${UID}:${GID}"
     container_name: lingutodo7
     networks:
       - default
